@@ -17,14 +17,14 @@ function doGet(e) {
     let rowPhone = String(data[i][YOUR_PHONE_COLUMN_INDEX]);  
     let customerID = data[i][YOUR_CUSTOMER_ID_COLUMN_INDEX];
     let totalPoints = data[i][YOUR_TOTAL_POINTS_COLUMN_INDEX];
-    let status = data[i][YOUR_STATUS_COLUMN_INDEX];  // <-- Status column
+    let Status = data[i][YOUR_STATUS_COLUMN_INDEX];  // <-- Status column
 
     if (rowPhone === phone) {
       found = true;
       response = {
         customerID: customerID,
         totalPoints: totalPoints,
-        status: status     // <-- Add status here
+        status: Status     // <-- Add status here
       };
       break;
     }
