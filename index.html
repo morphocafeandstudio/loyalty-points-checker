@@ -1,67 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check Loyalty Points</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f7f7f7;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      font-size: 16px;
-    }
-    #result {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Check Your Loyalty Points</h1>
-  <input type="text" id="phone" placeholder="Enter your phone number">
-  <button onclick="checkPoints()">Check</button>
-  <div id="result"></div>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3MvAe02H20INBcjYhCy5U0fo7CZzAKj6mfG0FuWqzmwcpVV5e4RFWsSbY_fkgzYCQ/exec"; // Replace this with your Apps Script Web App URL
-
-    function checkPoints() {
-      const phone = document.getElementById('phone').value.trim();
-      if (!phone) {
-        alert("Please enter your phone number.");
-        return;
-      }
-
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: phone })
-      })
-      .then(response => response.json())
-      .then(data => {
-        const resultDiv = document.getElementById('result');
-        if (data.error) {
-          resultDiv.innerHTML = data.error;
-        } else {
-          resultDiv.innerHTML = `
-            Customer ID: ${data.customerID} <br>
-            Total Points: ${data.totalPoints} <br>
-            Status: ${data.status}
-          `;
+<script>
+    async function checkPoints() {
+        let phone = document.getElementById("phone").value.trim();
+        if (!phone) {
+            alert("Please enter your phone number");
+            return;
         }
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('result').innerHTML = "Something went wrong. Try again later.";
-      });
+
+        try {
+            let response = await fetch(`https://script.google.com/macros/s/AKfycbwZitAJgy8-uk_zIVu0D2HNR6tXjmkUZVY_spMO62w/dev`);
+            let data = await response.json();
+
+            const resultEl = document.getElementById("result");
+
+            if (data.error) {
+                resultEl.innerText = data.error;
+            } else {
+                // Display Customer ID, Total Points, and Status
+                resultEl.innerText = 
+                    `Customer ID: ${data.customerID}\n` +
+                    `Total Points: ${data.totalPoints}\n` +
+                    `Status: ${data.status}`;
+            }
+        } catch (err) {
+            console.error(err);
+            document.getElementById("result").innerText = "Something went wrong. Try again later.";
+        }
     }
-  </script>
-</body>
-</html>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("phone").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                checkPoints();
+            }
+        });
+    });
+</script>
