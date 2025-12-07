@@ -62,46 +62,40 @@
             color: black;
         }
     </style>
-    <script>
-        async function checkPoints() {
-            let phone = document.getElementById("phone").value.trim();
-            if (!phone) {
-                alert("Please enter your phone number");
-                return;
-            }
+   
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3MvAe02H20INBcjYhCy5U0fo7CZzAKj6mfG0FuWqzmwcpVV5e4RFWsSbY_fkgzYCQ/exec"; // Replace this with your Apps Script Web App URL
 
-            let response = await fetch(`https://script.google.com/macros/s/AKfycby1lOJW3llFnED7nBdVoI2fiRLdcOrNgxem6SdHaWr2FqMOyt5ORT7Gpx96oO1Hn6ep/exec?phone=${phone}`);
-            let data = await response.json();
+    function checkPoints() {
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone) {
+        alert("Please enter your phone number.");
+        return;
+      }
 
-            if (data.error) {
-                document.getElementById("result").innerText = data.error;
-            } else {
-                document.getElementById("result").innerText = 
-                    `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}`;
-            }
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: phone })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const resultDiv = document.getElementById('result');
+        if (data.error) {
+          resultDiv.innerHTML = data.error;
+        } else {
+          resultDiv.innerHTML = `
+            Customer ID: ${data.customerID} <br>
+            Total Points: ${data.totalPoints} <br>
+            Status: ${data.status}
+          `;
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("phone").addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    checkPoints();
-                }
-            });
-        });
-    </script>
-</head>
-<body>
-    <!-- Brand Logo -->
-    <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
-
-    <!-- Title -->
-    <h2>Check Your Loyalty Points</h2>
-
-    <!-- Input and Button -->
-    <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
-    <button onclick="checkPoints()">Check Points</button>
-
-    <!-- Result Display -->
-    <p id="result"></p>
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('result').innerHTML = "Something went wrong. Try again later.";
+      });
+    }
+  </script>
 </body>
 </html>
