@@ -1,18 +1,31 @@
-async function checkPoints() {
-    let phone = document.getElementById("phone").value.trim();
-    if (!phone) {
-        alert("Please enter your phone number");
-        return;
-    }
-
-    try {
-        let response = await fetch(`https://script.google.com/macros/s/AKfycby1lOJW3llFnED7nBdVoI2fiRLdcOrNgxem6SdHaWr2FqMOyt5ORT7Gpx96oO1Hn6ep/exec?phone=${phone}`);
-        let data = await response.json();
-
-        if (data.error) {
-            document.getElementById("result").innerText = data.error;
-        } else {
-            document.getElementById("result").innerText = 
-                `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}\nStatus: ${data.status}`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Your Loyalty Points</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/background.png?raw=true');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-    } catch
+
+        #brand-logo {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: black;
+            margin-bottom: 20px;
