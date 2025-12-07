@@ -60,10 +60,12 @@
             margin-top: 20px;
             font-size: 28px;
             color: black;
-            white-space: pre-line; /* Keep line breaks from \n */
+            white-space: pre-line; /* Keep line breaks */
         }
     </style>
     <script>
+        const WEB_APP_URL = "YOUR_WEB_APP_URL"; // Replace with your deployed Web App URL
+
         async function checkPoints() {
             let phone = document.getElementById("phone").value.trim();
             if (!phone) {
@@ -72,7 +74,7 @@
             }
 
             try {
-                let response = await fetch(`https://script.google.com/macros/s/AKfycby1lOJW3llFnED7nBdVoI2fiRLdcOrNgxem6SdHaWr2FqMOyt5ORT7Gpx96oO1Hn6ep/exec?phone=${phone}`);
+                let response = await fetch(`${WEB_APP_URL}?phone=${phone}`);
                 let data = await response.json();
 
                 if (data.error) {
@@ -96,17 +98,10 @@
     </script>
 </head>
 <body>
-    <!-- Brand Logo -->
     <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
-
-    <!-- Title -->
     <h2>Check Your Loyalty Points</h2>
-
-    <!-- Input and Button -->
     <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
     <button onclick="checkPoints()">Check Points</button>
-
-    <!-- Result Display -->
     <p id="result"></p>
 </body>
 </html>
