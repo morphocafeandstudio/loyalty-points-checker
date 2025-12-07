@@ -79,7 +79,7 @@
                     document.getElementById("result").innerText = data.error;
                 } else {
                     document.getElementById("result").innerText = 
-                        `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}\nStatus: ${data.Status}`;
+                        `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}\nStatus: ${data.status || "No status available"}`;
                 }
             } catch (err) {
                 console.error(err);
