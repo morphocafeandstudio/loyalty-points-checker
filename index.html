@@ -66,8 +66,8 @@
 </head>
 <body>
   <h1>Check Your Loyalty Points</h1>
-  <p>Enter your phonenumber:</p>
-  <input type="text" id="phoneInput" placeholder="e.g., 09123456789">
+  <p>Enter your phone number:</p>
+  <input type="text" id="phoneInput" placeholder="e.g., 9123456789">
   <button onclick="checkPoints()">Check</button>
 
   <div id="result"></div>
@@ -78,7 +78,7 @@
     function checkPoints() {
       const phone = document.getElementById('phoneInput').value.trim();
       if (!phone) {
-        alert('Please enter your phonenumber.');
+        alert('Please enter your phone number.');
         return;
       }
 
@@ -103,18 +103,5 @@
     }
   </script>
   </head>
-<body>
-    <!-- Brand Logo -->
-    <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
-
-    <!-- Title -->
-    <h2>Check Your Loyalty Points</h2>
-
-    <!-- Input and Button -->
-    <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
-    <button onclick="checkPoints()">Check Points</button>
-
-    <!-- Result Display -->
-    <p id="result"></p>
 </body>
 </html>
