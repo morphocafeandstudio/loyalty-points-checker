@@ -10,11 +10,11 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            background-image: url('https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/background.png?raw=true'); /* Set background image */
+            background-image: url('https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/background.png?raw=true');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 100vh; /* Full page height */
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -22,20 +22,20 @@
         }
 
         #brand-logo {
-            width: 200px; /* Adjust the logo size */
+            width: 200px;
             margin-bottom: 10px;
         }
 
         h2 {
-            color: black; /* Title color */
+            color: black;
             margin-bottom: 20px;
-            font-size: 24px; /* Larger title */
+            font-size: 24px;
         }
 
         input {
             padding: 15px;
             width: 300px;
-            font-size: 14px; /* Larger input text */
+            font-size: 14px;
             border: none;
             border-radius: 5px;
             text-align: center;
@@ -47,7 +47,7 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            font-size: 22px; /* Larger button text */
+            font-size: 22px;
             background-color: #007BFF;
             color: white;
         }
@@ -60,8 +60,10 @@
             margin-top: 20px;
             font-size: 28px;
             color: black;
+            white-space: pre-line; /* Enables line breaks */
         }
     </style>
+
     <script>
         async function checkPoints() {
             let phone = document.getElementById("phone").value.trim();
@@ -76,8 +78,10 @@
             if (data.error) {
                 document.getElementById("result").innerText = data.error;
             } else {
-                document.getElementById("result").innerText = 
-                    `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}`;
+                document.getElementById("result").innerText =
+                    `Customer ID: ${data.customerID}\n` +
+                    `Total Points: ${data.totalPoints}\n` +
+                    `Status: ${data.status}`;
             }
         }
 
@@ -90,18 +94,15 @@
         });
     </script>
 </head>
+
 <body>
-    <!-- Brand Logo -->
     <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
 
-    <!-- Title -->
     <h2>Check Your Loyalty Points</h2>
 
-    <!-- Input and Button -->
     <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
     <button onclick="checkPoints()">Check Points</button>
 
-    <!-- Result Display -->
     <p id="result"></p>
 </body>
 </html>
