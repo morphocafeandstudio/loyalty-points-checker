@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Your Loyalty Points</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Your Loyalty Points</title>
+  <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -62,13 +62,15 @@
             color: black;
         }
     </style>
-    <script>
-        async function checkPoints() {
-            let phone = document.getElementById("phone").value.trim();
-            if (!phone) {
-                alert("Please enter your phone number");
-                return;
-            }
+
+</head>
+<body>
+  <h1>Check Your Loyalty Points</h1>
+  <p>Enter your phonenumber:</p>
+  <input type="text" id="phoneInput" placeholder="e.g., 09123456789">
+  <button onclick="checkPoints()">Check</button>
+
+  <div id="result"></div>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyLOWU0qLv3U_ZL3XNKnDUyRnoSoz1qbst9Bak04-FAfIH1Mg2Q-02QWsWNNvk5HUB5/exec'; // Replace with your Apps Script URL
