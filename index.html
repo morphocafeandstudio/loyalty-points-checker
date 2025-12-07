@@ -1,37 +1,131 @@
-<script>
-    async function checkPoints() {
-        let phone = document.getElementById("phone").value.trim();
-        if (!phone) {
-            alert("Please enter your phone number");
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Your Loyalty Points</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/background.png?raw=true');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        try {
-            let response = await fetch(`https://script.google.com/macros/s/AKfycbwZitAJgy8-uk_zIVu0D2HNR6tXjmkUZVY_spMO62w/dev`);
-            let data = await response.json();
-
-            const resultEl = document.getElementById("result");
-
-            if (data.error) {
-                resultEl.innerText = data.error;
-            } else {
-                // Display Customer ID, Total Points, and Status
-                resultEl.innerText = 
-                    `Customer ID: ${data.customerID}\n` +
-                    `Total Points: ${data.totalPoints}\n` +
-                    `Status: ${data.status}`;
-            }
-        } catch (err) {
-            console.error(err);
-            document.getElementById("result").innerText = "Something went wrong. Try again later.";
+        #brand-logo {
+            width: 200px;
+            margin-bottom: 10px;
         }
-    }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("phone").addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                checkPoints();
+        h2 {
+            color: black;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        input {
+            padding: 15px;
+            width: 300px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        button {
+            padding: 13px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 22px;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 28px;
+            color: black;
+            white-space: pre-line; /* Preserve line breaks */
+        }
+
+        .status-active { color: green; }
+        .status-expiring { color: orange; }
+        .status-expired { color: red; }
+    </style>
+</head>
+<body>
+    <!-- Brand Logo -->
+    <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
+
+    <!-- Title -->
+    <h2>Check Your Loyalty Points</h2>
+
+    <!-- Input and Button -->
+    <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
+    <button onclick="checkPoints()">Check Points</button>
+
+    <!-- Result Display -->
+    <p id="result"></p>
+
+    <script>
+        async function checkPoints() {
+            let phone = document.getElementById("phone").value.trim();
+            if (!phone) {
+                alert("Please enter your phone number");
+                return;
             }
+
+            try {
+                // Replace this URL with your deployed Apps Script Web App URL
+                let response = await fetch(`https://script.google.com/macros/s/AKfycbwZitAJgy8-uk_zIVu0D2HNR6tXjmkUZVY_spMO62w/dev`);
+                let data = await response.json();
+
+                const resultEl = document.getElementById("result");
+
+                if (data.error) {
+                    resultEl.innerText = data.error;
+                } else {
+                    // Color-code the status
+                    let statusClass = '';
+                    let statusText = data.status || '';
+
+                    if (statusText.toLowerCase().includes('expired')) statusClass = 'status-expired';
+                    else if (statusText.toLowerCase().includes('soon')) statusClass = 'status-expiring';
+                    else statusClass = 'status-active';
+
+                    resultEl.innerHTML = 
+                        `Customer ID: ${data.customerID}\n` +
+                        `Total Points: ${data.totalPoints}\n` +
+                        `Status: <span class="${statusClass}">${statusText}</span>`;
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById("result").innerText = "Something went wrong. Try again later.";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("phone").addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    checkPoints();
+                }
+            });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
