@@ -1,107 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Your Loyalty Points</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-image: url('https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/background.png?raw=true');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+<script>
+    async function checkPoints() {
+        let phone = document.getElementById("phone").value.trim();
+        if (!phone) {
+            alert("Please enter your phone number");
+            return;
         }
 
-        #brand-logo {
-            width: 200px;
-            margin-bottom: 10px;
-        }
+        try {
+            let response = await fetch(`https://script.google.com/macros/s/AKfycby1lOJW3llFnED7nBdVoI2fiRLdcOrNgxem6SdHaWr2FqMOyt5ORT7Gpx96oO1Hn6ep/exec?phone=${phone}`);
+            let data = await response.json();
 
-        h2 {
-            color: black;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        input {
-            padding: 15px;
-            width: 300px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        button {
-            padding: 13px;
-            margin-top: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            font-size: 22px;
-            background-color: #007BFF;
-            color: white;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 28px;
-            color: black;
-            white-space: pre-line; /* Keep line breaks */
-        }
-    </style>
-    <script>
-        const WEB_APP_URL = "YOUR_WEB_APP_URL"; // Replace with your deployed Web App URL
-
-        async function checkPoints() {
-            let phone = document.getElementById("phone").value.trim();
-            if (!phone) {
-                alert("Please enter your phone number");
-                return;
+            if (data.error) {
+                document.getElementById("result").innerText = data.error;
+            } else {
+                document.getElementById("result").innerText = 
+                    `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}\nStatus: ${data.status}`;
             }
-
-            try {
-                let response = await fetch(`${WEB_APP_URL}?phone=${phone}`);
-                let data = await response.json();
-
-                if (data.error) {
-                    document.getElementById("result").innerText = data.error;
-                } else {
-                    document.getElementById("result").innerText = 
-                        `Customer ID: ${data.customerID}\nTotal Points: ${data.totalPoints}\nStatus: ${data.status}`;
-                }
-            } catch (err) {
-                document.getElementById("result").innerText = "Error fetching data. Please try again later.";
-            }
+        } catch (err) {
+            document.getElementById("result").innerText = "Error fetching data. Please try again.";
+            console.error(err);
         }
+    }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("phone").addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    checkPoints();
-                }
-            });
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("phone").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                checkPoints();
+            }
         });
-    </script>
-</head>
-<body>
-    <img id="brand-logo" src="https://github.com/morphocafeandstudio/loyalty-points-checker/blob/main/morpho%20logo.png?raw=true" alt="Brand Logo">
-    <h2>Check Your Loyalty Points</h2>
-    <input type="text" id="phone" placeholder="Enter your phone number (eg.9XXXXXXXXX)">
-    <button onclick="checkPoints()">Check Points</button>
-    <p id="result"></p>
-</body>
-</html>
+    });
+</script>
