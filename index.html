@@ -43,7 +43,7 @@ async function checkPoints() {
             document.getElementById("result").innerText = data.error;
         } else {
             // Determine status color
-            let statusClass = "status-valid"; // default
+            let statusClass = "status-valid";
             if (data.status.toLowerCase().includes("expired")) statusClass = "status-expired";
             else if (data.status.toLowerCase().includes("soon")) statusClass = "status-soon";
 
