@@ -3,48 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check Loyalty Points</title>
+  <title>Check Your Loyalty Points</title>
   <style>
-    body { font-family: Arial; text-align: center; padding: 30px; }
-    input, button { padding: 10px; margin: 10px; width: 250px; }
-    .result { margin-top: 20px; font-weight: bold; }
+    body { font-family: Arial; text-align: center; padding: 50px; }
+    input, button { padding: 10px; margin: 5px; font-size: 16px; }
+    #result { margin-top: 20px; font-size: 18px; }
   </style>
 </head>
 <body>
-  <h2>Check Your Loyalty Points</h2>
-  <input type="text" id="phoneNumber" placeholder="Enter your phone number">
-  <br>
-  <button onclick="checkPoints()">Check Points</button>
-  <div class="result" id="result"></div>
+  <h1>Check Your Loyalty Points</h1>
+  <p>Enter your phonenumber:</p>
+  <input type="text" id="phoneInput" placeholder="e.g., 09123456789">
+  <button onclick="checkPoints()">Check</button>
+
+  <div id="result"></div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwZitAJgy8-uk_zIVu0D2HNR6tXjmkUZVY_spMO62w/dev"; // replace this
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyLOWU0qLv3U_ZL3XNKnDUyRnoSoz1qbst9Bak04-FAfIH1Mg2Q-02QWsWNNvk5HUB5/exec'; // Replace with your Apps Script URL
 
-    async function checkPoints() {
-      const phone = document.getElementById('phoneNumber').value.trim();
-      const resultDiv = document.getElementById('result');
-
+    function checkPoints() {
+      const phone = document.getElementById('phoneInput').value.trim();
       if (!phone) {
-        resultDiv.innerHTML = "Please enter your phone number.";
+        alert('Please enter your phonenumber.');
         return;
       }
 
-      try {
-        const response = await fetch(`${WEB_APP_URL}?phone=${encodeURIComponent(phone)}`);
-        const data = await response.json();
-
-        if (data) {
-          resultDiv.innerHTML =
-            `Customer ID: ${data.customerID}<br>` +
-            `Total Points: ${data.totalPoints}<br>` +
-            `Status: ${data.status}`;
-        } else {
-          resultDiv.innerHTML = "Phone number not found.";
-        }
-      } catch (error) {
-        console.error(error);
-        resultDiv.innerHTML = "Error fetching data. Try again later.";
-      }
+      fetch(`${API_URL}?phonenumber=${encodeURIComponent(phone)}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultDiv = document.getElementById('result');
+          if (data.error) {
+            resultDiv.innerHTML = `<p>${data.error}</p>`;
+          } else {
+            resultDiv.innerHTML = `
+              <p><strong>Customer ID:</strong> ${data.customerID}</p>
+              <p><strong>Total Points:</strong> ${data.totalpoints}</p>
+              <p><strong>Status:</strong> ${data.status}</p>
+            `;
+          }
+        })
+        .catch(err => {
+          document.getElementById('result').innerHTML = '<p>Error fetching data.</p>';
+          console.error(err);
+        });
     }
   </script>
 </body>
