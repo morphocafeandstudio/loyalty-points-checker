@@ -1,6 +1,40 @@
-return ContentService.createTextOutput(JSON.stringify({
-    customerID: row[customerIDIndex],
-    totalPoints: row[totalPointsIndex],
-    status: row[statusIndex]
-}))
-.setMimeType(ContentService.MimeType.JSON);
+function doGet(e) {
+  const phone = e.parameter.phone;
+  if (!phone) {
+    return ContentService.createTextOutput(JSON.stringify({ error: "Phone number required" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  const ss = SpreadsheetApp.openById("YOUR_SHEET_ID_HERE"); 
+  const sheet = ss.getSheetByName("summarysheet"); // your sheet tab name
+  const data = sheet.getDataRange().getValues();
+
+  let found = false;
+  let response = {};
+
+  // Loop through rows
+  for (let i = 1; i < data.length; i++) {
+    let rowPhone = String(data[i][YOUR_PHONE_COLUMN_INDEX]);  
+    let customerID = data[i][YOUR_CUSTOMER_ID_COLUMN_INDEX];
+    let totalPoints = data[i][YOUR_TOTAL_POINTS_COLUMN_INDEX];
+    let status = data[i][YOUR_STATUS_COLUMN_INDEX];  // <-- Status column
+
+    if (rowPhone === phone) {
+      found = true;
+      response = {
+        customerID: customerID,
+        totalPoints: totalPoints,
+        status: status     // <-- Add status here
+      };
+      break;
+    }
+  }
+
+  if (!found) {
+    return ContentService.createTextOutput(JSON.stringify({ error: "Phone number not found" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(response))
+    .setMimeType(ContentService.MimeType.JSON);
+}
